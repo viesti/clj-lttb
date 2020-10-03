@@ -3,13 +3,17 @@
             [oz.core :as oz]
             [clojure.edn :as edn]))
 
-(defn view-demo-data [i points]
+(defn view-demo-data [i & {:keys [points downsample?] :or {points 200 downsample? true}}]
   (if-not (#{0 1 2} i)
     (println "Please select data from range [0 2]")
-    (let [demo-data (-> "demo_data.edn" slurp edn/read-string)]
+    (let [demo-data (-> "demo_data.edn" slurp edn/read-string)
+          data (nth demo-data i)]
       (oz/view! {:width 1200
                  :height 600
-                 :data {:values (->> (nth demo-data i) (downsample points) (map (fn [[x y]] {:x x :y y})))}
+                 :data {:values (map (fn [[x y]] {:x x :y y})
+                                     (if downsample?
+                                       (downsample points data)
+                                       data))}
                  :mark {:type :line}
                  :encoding {:x {:field :x :type :quantitative}
                             :y {:field :y :type :quantitative}}}))))
