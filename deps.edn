@@ -1,0 +1,3 @@
+{:paths ["src"]
+ :aliases {:dev {:extra-deps {metasoarous/oz {:mvn/version "1.6.0-alpha26"}}
+                 :extra-paths ["dev"]}}}
