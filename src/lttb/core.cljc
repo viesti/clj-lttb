@@ -7,7 +7,7 @@
       ;; Bucket size. Leave room for start and end data points
       (let [every (/ (- data-length 2)
                      (- threshold 2))]
-        (loop [sampled [(first data)]
+        (loop [sampled (transient [(first data)])
                a       0 ;; Initially a is the first point in the triangle
                i       0]
           (if (< i (- threshold 2))
@@ -52,8 +52,8 @@
                                                          next_a
                                                          (inc range_offs))))
                                               [max_area_point next_a]))]
-              (recur (conj sampled max_area_point) ;; Pick this point from the bucket
+              (recur (conj! sampled max_area_point) ;; Pick this point from the bucket
                      next_a ;; This a is the next a (chosen b)
                      (inc i)))
             ;; Always add last
-            (conj sampled (nth data (dec data-length)))))))))
+            (persistent! (conj! sampled (nth data (dec data-length))))))))))
