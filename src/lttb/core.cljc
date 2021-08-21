@@ -5,8 +5,10 @@
     (if (or (zero? threshold) (zero? data-length))
       data
       ;; Bucket size. Leave room for start and end data points
-      (let [every (/ (- data-length 2)
-                     (- threshold 2))]
+      (let [every (if (= 2 threshold)
+                    2
+                    (/ (- data-length 2)
+                       (- threshold 2)))]
         (loop [sampled (transient [(first data)])
                a       0 ;; Initially a is the first point in the triangle
                i       0]
