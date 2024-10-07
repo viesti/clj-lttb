@@ -1,7 +1,8 @@
 (ns lttb.core)
 
 (defn downsample [threshold data]
-  (let [data-length (count data)]
+  (let [data (vec data)
+        data-length (count data)]
     (if (or (zero? threshold) (zero? data-length))
       data
       ;; Bucket size. Leave room for start and end data points
