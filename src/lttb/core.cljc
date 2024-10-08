@@ -1,5 +1,7 @@
 (ns lttb.core)
 
+#?(:clj (set! *warn-on-reflection* true))
+
 (defn downsample [threshold data]
   (let [data (vec data)
         data-length (count data)]
@@ -56,7 +58,7 @@
                                                          (inc range_offs))))
                                               [max_area_point next_a]))]
               (recur (conj! sampled max_area_point) ;; Pick this point from the bucket
-                     next_a ;; This a is the next a (chosen b)
+                     (long next_a) ;; This a is the next a (chosen b)
                      (inc i)))
             ;; Always add last
             (persistent! (conj! sampled (nth data (dec data-length))))))))))
