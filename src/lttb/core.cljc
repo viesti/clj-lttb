@@ -39,24 +39,24 @@
                                                        max_area_point nil
                                                        next_a         nil
                                                        range_offs     range_offs]
-                                            (if (< range_offs range_to)
-                                              (let [[point_x point_y] (nth data range_offs)
-                                                    ;; Calculate triangle area over three buckets
-                                                    area              (* (Math/abs (- (* (- point_a_x avg_x)
-                                                                                         (- point_y point_a_y))
-                                                                                      (* (- point_a_x point_x)
-                                                                                         (- avg_y point_a_y))))
-                                                                         0.5)]
-                                                (if (> area max_area)
-                                                  (recur area
-                                                         (nth data range_offs)
-                                                         range_offs ;; Next a is this b
-                                                         (inc range_offs))
-                                                  (recur max_area
-                                                         max_area_point
-                                                         next_a
-                                                         (inc range_offs))))
-                                              [max_area_point next_a]))]
+                                                  (if (< range_offs range_to)
+                                                    (let [[point_x point_y] (nth data range_offs)
+                                                          ;; Calculate triangle area over three buckets
+                                                          area              (* (Math/abs (- (* (- point_a_x avg_x)
+                                                                                               (- point_y point_a_y))
+                                                                                            (* (- point_a_x point_x)
+                                                                                               (- avg_y point_a_y))))
+                                                                               0.5)]
+                                                      (if (> area max_area)
+                                                        (recur area
+                                                               (nth data range_offs)
+                                                               range_offs ;; Next a is this b
+                                                               (+ range_offs 1))
+                                                        (recur max_area
+                                                               max_area_point
+                                                               next_a
+                                                               (inc range_offs))))
+                                                    [max_area_point next_a]))]
               (recur (conj! sampled max_area_point) ;; Pick this point from the bucket
                      (long next_a) ;; This a is the next a (chosen b)
                      (inc i)))
